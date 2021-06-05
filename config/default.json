@@ -1,0 +1,10 @@
+{
+    "db": {
+        "host": "127.0.0.1",
+        "user": "root",
+        "password": "PASS1234",
+        "database":"blockchain",
+        "timezone":"+00:00",
+        "charset": "utf8mb4_general_ci"
+    }
+}
