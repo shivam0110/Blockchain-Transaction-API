@@ -55,7 +55,7 @@ Token.route('/trans')
  * @returns {Object} Result - JSON object of transaction summary 
  */
 .post(async (req,res,next) => {
-    // try{
+    try{
         const [web3url] = await db.query(`SELECT network_url, chainid FROM network where id = ${req.body.networkID};`);
         const web3 = new Web3(web3url[0].network_url);
         const networkId = await web3.eth.net.getId();
@@ -72,35 +72,35 @@ Token.route('/trans')
 
         const rawTransaction = {
             from: from,
-            nonce: web3.utils.toHex(web3.eth.getTransactionCount(from)),
-            gasPrice: 1,
-            gasLimit: req.body.gas,
+            // nonce: web3.utils.toHex(web3.eth.getTransactionCount(from)),
+            // gasPrice: 1,         //gasprice can be ommited
+            gasLimit: req.body.gas, 
             to: token_contract_address,
             value: 0,
             data: data,
             chainId: web3.utils.toHex(web3url[0].chainid)
         };
 
-        const privateKey = new Buffer.from(req.body.PrivateKey, 'hex');
-        const tx = new Tx(rawTransaction);
-        tx.sign(privateKey);
+        // const privateKey = new Buffer.from(req.body.PrivateKey, 'hex');
+        // const tx = new Tx(rawTransaction);
+        // tx.sign(privateKey);
 
-        const serializedTx = tx.serialize();
-        web3.eth.sendSignedTransaction(('0x' + serializedTx.toString('hex'))) 
+        // const serializedTx = tx.serialize();
+        // web3.eth.sendSignedTransaction(('0x' + serializedTx.toString('hex'))) 
 
-        // const signed = await web3.eth.accounts.signTransaction(rawTransaction, req.body.PrivateKey);
-        // web3.eth.sendSignedTransaction(signed.rawTransaction)
+        const signed = await web3.eth.accounts.signTransaction(rawTransaction, req.body.PrivateKey);
+        web3.eth.sendSignedTransaction(signed.rawTransaction)
         .then(function (result) {
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(result*decimals);
+            res.json(result);
             console.log(result);
         })
         .catch((err) => next(err));
-    // }catch(err){
-    //     res.status(err.status || 500);
-    //     res.render('error');
-    // }
+    }catch(err){
+        res.status(err.status || 500);
+        res.render('error');
+    }
 });
 
 async function main(){

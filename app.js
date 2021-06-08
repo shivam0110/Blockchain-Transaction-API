@@ -15,6 +15,7 @@ var Token = require('./routes/TokenRouter');
 var crtADD = require('./routes/crtAddRouter');
 var Contract = require('./routes/ContractRouter');
 var Transaction = require('./routes/TransRouter');
+var XRP = require('./routes/XRPRouter');
 var USDTbal = require('./routes/balUSDTrouter');
 
 
@@ -39,6 +40,7 @@ app.use('/token', Token);
 app.use('/crtAdd', crtADD);
 app.use('/Contract', Contract);
 app.use('/transaction', Transaction);
+app.use('/XRP', XRP);
 app.use('/USDTbal', USDTbal);
 
 app.use(function(req, res, next) {

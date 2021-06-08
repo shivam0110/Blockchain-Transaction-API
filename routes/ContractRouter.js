@@ -23,12 +23,12 @@ Contract.route('/')
         const web3 = new Web3(web3url[0].network_url);
         
         web3.eth.accounts.wallet.add({
-            privateKey: req.body.PrivateKey,
+            privateKey: req.body.privateKey,
             address: req.body.account
         });
-
+        const abi = req.body.abi;
         //Contract object and account info
-        let deploy_contract = new web3.eth.Contract(req.body.abi);
+        let deploy_contract = new web3.eth.Contract(abi);
         let account = req.body.account;
 
         // Function Parameter
@@ -51,6 +51,7 @@ Contract.route('/')
         .then(function(newContractInstance){
             console.log(newContractInstance.options.address) // instance with the new contract address
             //0x6D54128f2a5f2DB4778C31832AB20B92a221f396
+            //0x053774faF8C21D099CC5932E24D69639D706Ea35
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
             res.json(newContractInstance.options);
