@@ -20,7 +20,13 @@ Coin.route('/')
         var web3 = new Web3(web3url[0].network_url);
         
         web3.eth.getBalance(WalletAddress)
-        .then(result => {
+        .then(async balance => {
+            const gasPrice = await web3.eth.getGasPrice();
+            const max_transferable = balance - (gasPrice * 21000);  
+            result = {
+                "balance": balance,
+                "max_transferable": max_transferable
+            }
             console.log(result);
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');

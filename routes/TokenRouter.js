@@ -30,10 +30,26 @@ Token.route('/')
 
         
         contract.methods.balanceOf(WalletAddress).call()
-        .then(function (result) {
+        .then(async function (balance) {
+
+            const data = contract.methods.transfer(WalletAddress, 0).encodeABI();
+            const gas = await web3.eth.estimateGas({
+                to: WalletAddress,
+                data: data
+            });
+            console.log(gas);
+
+            const gasPrice = await web3.eth.getGasPrice();
+            const max_transferable = balance - (gasPrice * gas);  
+            console.log(gasPrice );
+            result = {
+                "balance": balance*decimals,
+                "max_transferable": max_transferable*decimals
+            }
+
             res.statusCode = 200;
             res.setHeader('Content-Type', 'application/json');
-            res.json(result*decimals);
+            res.json(result);
             console.log(result);
         })
         .catch((err) => next(err));

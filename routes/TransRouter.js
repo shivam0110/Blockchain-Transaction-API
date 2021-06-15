@@ -54,6 +54,51 @@ Transaction.route('/pending')
     }
 });
 
+Transaction.route('/hstry')
+/** /transaction/hstry endpoint to get transaction history
+ * @param {Int} networkID - Id of network according to database
+ * @returns {Object} Result - total pending transaction
+ */
+.post(async (req,res,next) => {
+    // try{
+        // const [web3url] = await db.query(`SELECT network_url FROM network where id = ${req.body.networkID};`);
+        // var web3 = new Web3(web3url[0].network_url);
+        
+        var myAddr = req.body.WalletAddress;
+
+        var [result] = await db.query(`SELECT thash FROM transactions where tto = "${myAddr}" or tfrom = "${myAddr}";`);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(result);
+
+        
+    // }catch(err){
+    //     res.status(err.status || 500);
+    //     res.render('error');
+    // }
+});
+
+Transaction.route('/hstry/inc')
+/** /transaction/hstry endpoint to get incoming transaction history
+ * @param {Int} networkID - Id of network according to database
+ * @returns {Object} Result - total pending transaction
+ */
+.post(async (req,res,next) => {
+    try{        
+        var myAddr = req.body.WalletAddress;
+
+        var [result] = await db.query(`SELECT thash FROM transactions where tto = "${myAddr}";`);
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.json(result);
+
+        
+    }catch(err){
+        res.status(err.status || 500);
+        res.render('error');
+    }
+});
+
 async function main(){
 db = await mysql.createConnection({
   host: config.get('db.host'),
