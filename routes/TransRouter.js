@@ -60,22 +60,22 @@ Transaction.route('/hstry')
  * @returns {Object} Result - total pending transaction
  */
 .post(async (req,res,next) => {
-    // try{
+     try{
         // const [web3url] = await db.query(`SELECT network_url FROM network where id = ${req.body.networkID};`);
         // var web3 = new Web3(web3url[0].network_url);
         
         var myAddr = req.body.WalletAddress;
 
-        var [result] = await db.query(`SELECT thash FROM transactions where tto = "${myAddr}" or tfrom = "${myAddr}";`);
+        var [result] = await db.query(`SELECT thash FROM transactions where ( tto = "${myAddr}" or tfrom = "${myAddr}") and network_id = ${req.body.networkID};`);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(result);
 
         
-    // }catch(err){
-    //     res.status(err.status || 500);
-    //     res.render('error');
-    // }
+     }catch(err){
+         res.status(err.status || 500);
+         res.render('error');
+     }
 });
 
 Transaction.route('/hstry/inc')
@@ -87,7 +87,7 @@ Transaction.route('/hstry/inc')
     try{        
         var myAddr = req.body.WalletAddress;
 
-        var [result] = await db.query(`SELECT thash FROM transactions where tto = "${myAddr}";`);
+        var [result] = await db.query(`SELECT thash FROM transactions where tto = "${myAddr}" and network_id = ${req.body.networkID};`);
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(result);
