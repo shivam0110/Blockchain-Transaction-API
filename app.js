@@ -18,6 +18,7 @@ var Transaction = require('./routes/TransRouter');
 var XRP = require('./routes/XRPRouter');
 var USDTbal = require('./routes/balUSDTrouter');
 var pastexplr = require('./routes/pastexplr');
+var ddbl = require('./routes/DDBLRouter');
 
 var app = express();
 
@@ -43,6 +44,7 @@ app.use('/transaction', Transaction);
 app.use('/XRP', XRP);
 app.use('/USDTbal', USDTbal);
 app.use('/pastexplr',pastexplr);
+app.use('/ddbl', ddbl);
 
 app.use(function(req, res, next) {
 /** catch 404 and forward to error handler */

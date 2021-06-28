@@ -104,7 +104,7 @@ XRP.route('/trans')
 
 
 XRP.route('/getTrans')
-/** XRP/getTrans endpoint to create a new address
+/** XRP/getTrans endpoint to 
  * @param {String} user_name - Name of user to store with the new account generated
  * @param {Int} networkID - Id of network according to database
  * @returns {Object} Result - JSON object containing new account information 

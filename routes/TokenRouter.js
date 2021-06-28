@@ -40,8 +40,8 @@ Token.route('/')
             console.log(gas);
 
             const gasPrice = await web3.eth.getGasPrice();
-            const max_transferable = balance - (gasPrice * gas);  
-            console.log(gasPrice );
+            const max_transferable = balance - (gasPrice * gas * decimals);  
+            console.log(balance);
             result = {
                 "balance": balance*decimals,
                 "max_transferable": max_transferable*decimals
