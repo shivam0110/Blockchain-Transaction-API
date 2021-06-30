@@ -51,34 +51,60 @@ Coin.route('/trans')
 .post(async (req,res,next) => {
     try{
         const n = (req.body.to).length;
+        const x = (req.body.from).length;
         const result = [];
         const [web3url] = await db.query(`SELECT network_url FROM network where id = ${req.body.networkID};`);
         var web3 = new Web3(web3url[0].network_url);
 
-        for(var i = 0; i<n; i++){            
-            const createTransaction = await web3.eth.accounts.signTransaction({
-                from: req.body.from,
-                // nonce: web3.utils.toHex(web3.eth.getTransactionCount(req.body.from)),
-                to: req.body.to[i],
-                value: req.body.value,
-                gas: 21000,
-            }, req.body.PrivateKey)
-            .catch((err) => result.push(err));
+        if(x < 2){
+            for(var i = 0; i<n; i++){            
+                const createTransaction = await web3.eth.accounts.signTransaction({
+                    from: req.body.from[0],
+                    // nonce: web3.utils.toHex(web3.eth.getTransactionCount(req.body.from)),
+                    to: req.body.to[i],
+                    value: req.body.value,
+                    gas: 21000,
+                }, req.body.PrivateKey[0])
+                .catch((err) => result.push(err));
 
-            // console.log(createTransaction);
+                // console.log(createTransaction);
 
-            await  web3.eth.sendSignedTransaction(createTransaction.rawTransaction)
-            .then(function (ans) {
-                result.push(ans);                
-            })
-            .catch((err) => console.log(err));
+                await  web3.eth.sendSignedTransaction(createTransaction.rawTransaction)
+                .then(function (ans) {
+                    result.push(ans);                
+                })
+                .catch((err) => console.log(err));
+            }
+
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(result);
+            console.log(result);
+        }else{
+            for(var i = 0; i<x; i++){            
+                const createTransaction = await web3.eth.accounts.signTransaction({
+                    from: req.body.from[i],
+                    // nonce: web3.utils.toHex(web3.eth.getTransactionCount(req.body.from)),
+                    to: req.body.to[0],
+                    value: req.body.value,
+                    gas: 21000,
+                }, req.body.PrivateKey[i])
+                .catch((err) => result.push(err));
+
+                // console.log(createTransaction);
+
+                await  web3.eth.sendSignedTransaction(createTransaction.rawTransaction)
+                .then(function (ans) {
+                    result.push(ans);                
+                })
+                .catch((err) => console.log(err));
+            }
+
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(result);
+            console.log(result);
         }
-
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(result);
-        console.log(result);
-
     }catch(err){
         res.status(err.status || 500);
         res.render('error');
