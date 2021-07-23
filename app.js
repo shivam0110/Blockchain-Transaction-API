@@ -20,6 +20,8 @@ var USDTbal = require('./routes/balUSDTrouter');
 var pastexplr = require('./routes/pastexplr');
 var ddbl = require('./routes/DDBLRouter');
 var bnbhist = require('./routes/bnbhistRouter');
+var addressRouter = require('./routes/addressRouter');
+// var stellar = require('./routes/stellarRouter');
 
 var app = express();
 
@@ -47,6 +49,8 @@ app.use('/USDTbal', USDTbal);
 app.use('/pastexplr',pastexplr);
 app.use('/ddbl', ddbl);
 app.use('/bnbhist', bnbhist);
+app.use('/address', addressRouter);
+// app.use('/stellar', stellar);
 
 app.use(function(req, res, next) {
 /** catch 404 and forward to error handler */
