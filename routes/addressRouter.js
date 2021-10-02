@@ -1,4 +1,4 @@
-/** @module Coin */
+/** @module Addresses */
 const express = require('express');
 const config = require('config');
 const mysql = require("mysql2/promise");
@@ -6,10 +6,9 @@ const Web3 = require('web3');
 const address = express.Router();
 
 address.route('/')
-/** /coin endpoint to check balance of a particular coin
- * @param {string} WalletAddress - Address of the wallet to check balance of
+/** /address endpoint to take addresses from transaction and store them with corresponding network_id(given) in addresses table
  * @param {int} networkID - Id of network according to database
- * @returns {number} String - Result : working...
+ * @returns {Object} Result - JSON object of addresses to be stored in addresses table
  */
 .post(async (req,res,next) => {
     try{
@@ -39,9 +38,9 @@ address.route('/')
 })
 
 address.route('/bal')
-/** address/bal endpoint to get balance for all stored array
+/** /address/bal endpoint to get balance for all stored array in addresses table according to network_id(given)
  * @param {int} networkID - Id of network according to database
- * @returns {Object} Result - JSON object of transaction summary  
+ * @returns {Object} Result - JSON object of addresses and their balance
  */
 .post(async (req,res,next) => {
     try{

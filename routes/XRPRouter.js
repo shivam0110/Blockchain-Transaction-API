@@ -7,9 +7,9 @@ const fetch = require('node-fetch');
 const XRP = express.Router();
 
 XRP.route('/crtAdd')
-/** XRP/crtAdd endpoint to create a new address
+/** /XRP/crtAdd endpoint to create a new address
  * @param {String} user_name - Name of user to store with the new account generated
- * @param {Int} networkID - Id of network according to database
+ * @param {Int} networkID - Id of XRP network according to database
  * @returns {Object} Result - JSON object containing new account information 
  */
 .post(async (req,res,next) => {
@@ -47,6 +47,14 @@ XRP.route('/crtAdd')
 
 
 XRP.route('/trans')
+/** /XRP/trans endpoint to transafer crypto from one address to another for a XRP coin
+ * @param {string} sender - Address to transfer amount from 
+ * @param {string} reciever - Address to transfer amount to  
+ * @param {string} secret - Private key of address to tranfer crypto from
+ * @param {int} amount - Amount to be transferred  
+ * @param {Int} networkID - Id of XRP network according to database
+ * @returns {Object} Result - JSON object of transaction hash
+ */
 .post(async (req,res,next) => {
     try{         
         const [url] = await db.query(`SELECT network_url FROM network where id = ${req.body.networkID};`);
@@ -104,10 +112,10 @@ XRP.route('/trans')
 
 
 XRP.route('/getTrans')
-/** XRP/getTrans endpoint to 
- * @param {String} user_name - Name of user to store with the new account generated
- * @param {Int} networkID - Id of network according to database
- * @returns {Object} Result - JSON object containing new account information 
+/** /XRP/getTrans endpoint to get transaction details of a address
+ * @param {String} address - Address to get transaction details of
+ * @param {Int} networkID - Id of XRP network according to database
+ * @returns {Object} Result - JSON object containing transaction details of a address
  */
 .post(async (req,res,next) => {
     try{         
@@ -148,6 +156,11 @@ XRP.route('/getTrans')
 });
 
 XRP.route('/accInfo')
+/** /XRP/accInfo endpoint to to get info about a xrp's coin address
+ * @param {Int} networkID - Id of XRP network according to database
+ * @param {string} address - Address to get information of  
+ * @returns {Object} Result - JSON object of containing info of coin's address 
+ */
 .post(async (req,res,next) => {
     try{         
         const user_name = req.body.user_name;
