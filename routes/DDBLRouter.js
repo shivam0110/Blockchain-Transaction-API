@@ -1,3 +1,4 @@
+/** @module Doge-Dash-Bitcoin-Litecoin  */
 const express = require('express');
 require('dotenv').config();
 const config = require('config');
@@ -12,6 +13,11 @@ var buffer  = require('buffer');
 const DDBL = express.Router();
 
 DDBL.route('/crtAdd')
+/** /ddbl/crtAdd endpoint to create a new address and private key for a DDBL coin
+ * @param {string} coin - Specify coin (Doge, Dash, Bitcoin or Litecoin) to create address for
+ * @param {string} user_name - User_name to corresponding address  
+ * @returns {Object} Result - JSON object of pair of Address and its private key
+ */
 .post((req,res,next) => {
     try{         
       fetch(`https://api.blockcypher.com/v1/${req.body.coin}/main/addrs`, {
@@ -35,6 +41,14 @@ DDBL.route('/crtAdd')
 );
 
 DDBL.route('/trans')
+/** /ddbl/trans endpoint to transafer crypto from one address to another for a DDBL coin
+ * @param {string} coin - Specify coin (Doge, Dash, Bitcoin or Litecoin) to transfer from
+ * @param {string} from - Address to transfer amount from 
+ * @param {string} to - Address to transfer amount to  
+ * @param {string} PrivateKey - Private key of address to tranfer crypto from
+ * @param {int} value - Amount to be transferred  
+ * @returns {Object} Result - JSON object of transaction hash
+ */
 .post(
   async (req,res,next) => {
     // try{         
@@ -88,6 +102,11 @@ DDBL.route('/trans')
 );
 
 DDBL.route('/accinfo')
+/** /ddbl/accinfo endpoint to get info about a DDBL's address
+ * @param {string} coin - Specify coin (Doge, Dash, Bitcoin or Litecoin)
+ * @param {string} address - Address to get information of  
+ * @returns {Object} Result - JSON object of containing info of coin's address 
+ */
 .post((req,res,next) => {
     try{         
       fetch(`https://api.blockcypher.com/v1/${req.body.coin}/main/addrs/${req.body.address}/balance`, {
